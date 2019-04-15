@@ -1,3 +1,5 @@
+/** @type{import("phaser.js")} */
+
 var config = {
 
   type:Phaser.AUTO,

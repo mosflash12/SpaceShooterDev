@@ -1,3 +1,5 @@
+/** @type{import("phaser.js")} */
+
 class level1 extends Phaser.Scene {
 
   constructor(){
