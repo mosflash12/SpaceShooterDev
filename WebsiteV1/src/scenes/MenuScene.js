@@ -1,0 +1,20 @@
+import{CST} from "../CST";
+export class MenuScene extends Phaser.Scene{
+    constructor(){
+        super({
+            key: CST.SCENES.MENU
+        })
+
+    }
+    init(){
+
+    }
+    preload(data){
+        console.log(data);
+        console.log("I GOT IT");
+
+    }
+    create(){
+
+    }
+}
