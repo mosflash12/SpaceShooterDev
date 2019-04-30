@@ -127,7 +127,8 @@ exports.CST = void 0;
 var CST = {
   SCENES: {
     LOAD: "LOAD",
-    MENU: "MENU"
+    MENU: "MENU",
+    PLAY: "PLAY"
   }
 };
 exports.CST = CST;
@@ -177,11 +178,49 @@ function (_Phaser$Scene) {
     value: function init() {}
   }, {
     key: "preload",
-    value: function preload() {}
+    value: function preload() {
+      var _this = this;
+
+      //change resolution to: 800x600 before startting
+      //load image, spritesheet, sound
+      this.load.image("titlebg", "./assets/night_titlescreenbg.jpg");
+      this.load.image("options_button", "./assets/night_optionbutton.png");
+      this.load.image("play_button", "./assets/night_playbutton.png");
+      this.load.image("logo", "./assets/originallogo3.png");
+      this.load.spritesheet("orb", "./assets/orb2.png", {
+        frameHeight: 32,
+        frameWidth: 32
+      });
+      this.load.audio("title_music", "./assets/238072__shuinvy__childhood.mp3"); //create loading bar
+
+      var loadingBar = this.add.graphics({
+        fillStyle: {
+          color: 0xffffff //white
+
+        }
+      });
+      /*
+      Loader Events:
+          complete - when done loading everything
+          progress - loader number progress in decimal
+      */
+
+      for (var i = 0; i < 100; i++) {
+        this.load.spritesheet("cat" + i, "SpaceShooterDev/WebsiteV1/assets/testSprite/cat.png", {
+          frameHeight: 32,
+          frameWidth: 32
+        });
+      }
+
+      this.load.on("progress", function (percent) {
+        loadingBar.fillRect(0, _this.game.renderer.height / 2, _this.game.renderer.width * percent, 50);
+        console.log(percent);
+      });
+    }
   }, {
     key: "create",
     value: function create() {
-      this.scene.start(_CST.CST.SCENES.MENU, "hello from load scene");
+      this.scene.start(_CST.CST.SCENES.MENU);
     }
   }]);
 
@@ -234,20 +273,150 @@ function (_Phaser$Scene) {
     key: "init",
     value: function init() {}
   }, {
-    key: "preload",
-    value: function preload(data) {
-      console.log(data);
-      console.log("I GOT IT");
-    }
-  }, {
     key: "create",
-    value: function create() {}
+    value: function create() {
+      var _this = this;
+
+      //create images (z order)
+      this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.20, "logo").setDepth(1);
+      this.add.image(0, 0, "titlebg").setOrigin(0).setDepth(0);
+      var playButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "play_button").setDepth(1);
+      var optionButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, "options_button").setDepth(1); //crate sprites (if using pixel art, remove sharpen)
+
+      var hoverSprite = this.add.sprite(100, 100, "orb");
+      hoverSprite.setScale(2);
+      hoverSprite.setVisible(false); //creating animation
+
+      this.anims.create({
+        key: "walk",
+        frameRate: 4,
+        repeat: -1,
+        // to repeat forever
+        frames: this.anims.generateFrameNumbers("orb", {
+          frames: [0, 1, 2, 3, 4, 5, 6, 7]
+        })
+      }); //in order to stop audio when off the current page, disable pauseonblur
+      // this.sound.pauseOnBlur = false;
+      //to create audio
+
+      this.sound.play("title_music", {
+        loop: true
+      });
+      /*
+          PointerEvents:
+              pointerover - hovering
+              pointerout - nothovering
+              pointerup - click and release
+              pointerdown - just click
+              */
+
+      playButton.setInteractive();
+      optionButton.setInteractive();
+      playButton.on("pointerover", function () {
+        hoverSprite.setVisible(true);
+        hoverSprite.play("walk");
+        hoverSprite.x = playButton.x - playButton.width + 380;
+        hoverSprite.y = playButton.y;
+      });
+      playButton.on("pointerout", function () {
+        hoverSprite.setVisible(false);
+      });
+      playButton.on("pointerup", function () {
+        _this.scene.start(_CST.CST.SCENES.PLAY);
+      });
+      optionButton.on("pointerover", function () {
+        hoverSprite.setVisible(true);
+        hoverSprite.play("walk");
+        hoverSprite.x = playButton.x - playButton.width + 300;
+        hoverSprite.y = playButton.y + 100;
+      });
+      optionButton.on("pointerout", function () {
+        hoverSprite.setVisible(false);
+      });
+      optionButton.on("pointerup", function () {});
+    }
   }]);
 
   return MenuScene;
 }(Phaser.Scene);
 
 exports.MenuScene = MenuScene;
+},{"../CST":"src/CST.js"}],"src/scenes/PlayScene.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PlayScene = void 0;
+
+var _CST = require("../CST");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var PlayScene =
+/*#__PURE__*/
+function (_Phaser$Scene) {
+  _inherits(PlayScene, _Phaser$Scene);
+
+  function PlayScene() {
+    _classCallCheck(this, PlayScene);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(PlayScene).call(this, {
+      key: _CST.CST.SCENES.PLAY
+    }));
+  }
+
+  _createClass(PlayScene, [{
+    key: "init",
+    value: function init() {}
+  }, {
+    key: "preload",
+    value: function preload() {
+      /*     PlayScene.load.image()
+          PlayScene.load.image()
+          PlayScene.load.image()
+          PlayScene.load.spritesheet() */
+    }
+  }, {
+    key: "create",
+    value: function create() {// Gamepad.physics.startSystem(Phaser.Physics.ARCADE)
+      // PlayScene.add.sprite(0,0,'sky')
+
+      /*  platforms = game.add.group()
+       platforms.enableBody = true
+         let ground = platforms.create(0, game.world.height - 64, 'ground')
+       ground.scale.setTo(2,2)
+       ground.body.immovable = true
+       
+       
+         player = game.add.sprite(32, game.world.height - 150, 'woof')
+       game.physics.arcade.enable(player)
+       player.body.bounce.y = 0.2
+       player.body.gravity.y = 800
+       player.body.collideWorldBounds = true */
+    }
+  }]);
+
+  return PlayScene;
+}(Phaser.Scene);
+
+exports.PlayScene = PlayScene;
 },{"../CST":"src/CST.js"}],"src/main.js":[function(require,module,exports) {
 "use strict";
 
@@ -255,13 +424,18 @@ var _LoadScene = require("./scenes/LoadScene");
 
 var _MenuScene = require("./scenes/MenuScene");
 
+var _PlayScene = require("./scenes/PlayScene");
+
 /**@type {import("phaser")} */
 var game = new Phaser.Game({
-  width: 100,
-  height: 100,
-  scene: [_LoadScene.LoadScene, _MenuScene.MenuScene]
+  width: 1067,
+  height: 600,
+  scene: [_LoadScene.LoadScene, _MenuScene.MenuScene, _PlayScene.PlayScene],
+  render: {
+    pixelArt: true
+  }
 });
-},{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js","./scenes/PlayScene":"src/scenes/PlayScene.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -289,7 +463,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56415" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53246" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
