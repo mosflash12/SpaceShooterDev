@@ -9,6 +9,13 @@ let game = new Phaser.Game({
     scene:[
         LoadScene, MenuScene, PlayScene
     ],
+    pyhsics: {
+        default: 'arcade',
+        arcade:{
+            gravity:{y:300},
+            debug:false
+        }
+    },
     render:{
         pixelArt: true,
     }

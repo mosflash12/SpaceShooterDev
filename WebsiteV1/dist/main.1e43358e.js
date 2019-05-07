@@ -388,28 +388,36 @@ function (_Phaser$Scene) {
   }, {
     key: "preload",
     value: function preload() {
-      /*     PlayScene.load.image()
-          PlayScene.load.image()
-          PlayScene.load.image()
-          PlayScene.load.spritesheet() */
+      this.load.spritesheet('ground', './assets/GameSprites[workinprogress]/test.png', {
+        frameWidth: 32,
+        frameHeight: 32
+      });
+      /* PlayScene.load.image('sky',''); */
+
+      /*   PlayScene.load.image()
+        PlayScene.load.image()
+        PlayScene.load.spritesheet() */
     }
   }, {
     key: "create",
-    value: function create() {// Gamepad.physics.startSystem(Phaser.Physics.ARCADE)
+    value: function create() {
+      platforms = this.physics.add.staticGroup();
+      platforms.create(400, 500, 'ground'); // Gamepad.physics.startSystem(Phaser.Physics.ARCADE)
       // PlayScene.add.sprite(0,0,'sky')
 
-      /*  platforms = game.add.group()
-       platforms.enableBody = true
-         let ground = platforms.create(0, game.world.height - 64, 'ground')
-       ground.scale.setTo(2,2)
-       ground.body.immovable = true
-       
-       
-         player = game.add.sprite(32, game.world.height - 150, 'woof')
-       game.physics.arcade.enable(player)
-       player.body.bounce.y = 0.2
-       player.body.gravity.y = 800
-       player.body.collideWorldBounds = true */
+      /*         platforms = game.add.group()
+              platforms.enableBody = true
+      
+              let ground = platforms.create(0, game.world.height - 64, 'ground')
+              ground.scale.setTo(2,2)
+              ground.body.immovable = true
+               */
+
+      /*         player = game.add.sprite(32, game.world.height - 150, 'w')
+              game.physics.arcade.enable(player)
+              player.body.bounce.y = 0.2
+              player.body.gravity.y = 800
+              player.body.collideWorldBounds = true */
     }
   }]);
 
@@ -431,6 +439,15 @@ var game = new Phaser.Game({
   width: 1067,
   height: 600,
   scene: [_LoadScene.LoadScene, _MenuScene.MenuScene, _PlayScene.PlayScene],
+  pyhsics: {
+    default: 'arcade',
+    arcade: {
+      gravity: {
+        y: 300
+      },
+      debug: false
+    }
+  },
   render: {
     pixelArt: true
   }
@@ -463,7 +480,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53246" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54693" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
