@@ -388,36 +388,32 @@ function (_Phaser$Scene) {
   }, {
     key: "preload",
     value: function preload() {
-      this.load.spritesheet('ground', './assets/GameSprites[workinprogress]/test.png', {
-        frameWidth: 32,
-        frameHeight: 32
-      });
-      /* PlayScene.load.image('sky',''); */
-
-      /*   PlayScene.load.image()
-        PlayScene.load.image()
-        PlayScene.load.spritesheet() */
+      this.load.image("RPWithTop", "./assets/GameSprites[workinprogress]/Maps/RPWithTop.png");
+      this.load.image("RPNoTop", "./assets/GameSprites[workinprogress]/Maps/RPNoTop.png");
+      this.load.image("GrassA", "./assets/GameSprites[workinprogress]/Maps/GrassA.png");
+      this.load.tilemapTiledJSON("mappy", "./assets/GameSprites[workinprogress]/Maps/level_1[backup].json");
     }
   }, {
     key: "create",
     value: function create() {
-      platforms = this.physics.add.staticGroup();
-      platforms.create(400, 500, 'ground'); // Gamepad.physics.startSystem(Phaser.Physics.ARCADE)
-      // PlayScene.add.sprite(0,0,'sky')
+      var mappy = this.add.tilemap("mappy");
+      var terrain = mappy.addTilesetImage("RPNoTop");
+      var terrain2 = mappy.addTilesetImage("RPWithTop");
+      var terrain3 = mappy.addTilesetImage("GrassA"); //layers
 
-      /*         platforms = game.add.group()
-              platforms.enableBody = true
-      
-              let ground = platforms.create(0, game.world.height - 64, 'ground')
-              ground.scale.setTo(2,2)
-              ground.body.immovable = true
-               */
-
-      /*         player = game.add.sprite(32, game.world.height - 150, 'w')
-              game.physics.arcade.enable(player)
-              player.body.bounce.y = 0.2
-              player.body.gravity.y = 800
-              player.body.collideWorldBounds = true */
+      var ground = mappy.createStaticLayer("Ground Layer", [terrain, terrain2, terrain3], 0, -2600).setDepth(-1);
+    }
+  }, {
+    key: "update",
+    value: function update() {// if( cursers.up.isDown){
+      //     PlayScene.camera.y -=4;
+      // }else if( cursers.down.isDown){
+      //     PlayScene.camera.y += 4;
+      // }else if( cursers.left.isDown){
+      //     PlayScene.camera.x -= 4;
+      // }else if ( cursers.right.isDown){
+      //     PlayScene.camera.x += 4;
+      // }
     }
   }]);
 
@@ -480,7 +476,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54693" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51525" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

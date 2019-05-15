@@ -12,52 +12,49 @@ export class PlayScene extends Phaser.Scene {
 
     preload(){
         
-        this.load.spritesheet('ground','./assets/GameSprites[workinprogress]/test.png',
-        {frameWidth:32,
-        frameHeight:32,});
+        this.load.image("RPWithTop","./assets/GameSprites[workinprogress]/Maps/RPWithTop.png");
+        this.load.image("RPNoTop","./assets/GameSprites[workinprogress]/Maps/RPNoTop.png");
+        this.load.image("GrassA","./assets/GameSprites[workinprogress]/Maps/GrassA.png");
 
-        /* PlayScene.load.image('sky',''); */
-
-
-      /*   PlayScene.load.image()
-        PlayScene.load.image()
-        PlayScene.load.spritesheet() */
-
-        
+        this.load.tilemapTiledJSON("mappy","./assets/GameSprites[workinprogress]/Maps/level_1[backup].json");
         
     }
 
    
 
     create(){
-    
 
-        platforms = this.physics.add.staticGroup();
-
-        platforms.create(400,500, 'ground');
-
-
+        let mappy = this.add.tilemap("mappy");
+        let terrain = mappy.addTilesetImage( "RPNoTop");
+        let terrain2 = mappy.addTilesetImage( "RPWithTop");
+        let terrain3 = mappy.addTilesetImage( "GrassA");
 
 
-        // Gamepad.physics.startSystem(Phaser.Physics.ARCADE)
+        //layers
 
-        // PlayScene.add.sprite(0,0,'sky')
-
-/*         platforms = game.add.group()
-        platforms.enableBody = true
-
-        let ground = platforms.create(0, game.world.height - 64, 'ground')
-        ground.scale.setTo(2,2)
-        ground.body.immovable = true
-         */
+        let ground = mappy.createStaticLayer("Ground Layer", [terrain,terrain2,terrain3],0,-2600).setDepth(-1);
         
+      
 
-/*         player = game.add.sprite(32, game.world.height - 150, 'w')
-        game.physics.arcade.enable(player)
-        player.body.bounce.y = 0.2
-        player.body.gravity.y = 800
-        player.body.collideWorldBounds = true */
+
+
+  
+    }
+
+    update(){
+
+        // if( cursers.up.isDown){
+        //     PlayScene.camera.y -=4;
+        // }else if( cursers.down.isDown){
+        //     PlayScene.camera.y += 4;
+        // }else if( cursers.left.isDown){
+        //     PlayScene.camera.x -= 4;
+
+        // }else if ( cursers.right.isDown){
+        //     PlayScene.camera.x += 4;
+        // }
     }
 
 }
+
 
