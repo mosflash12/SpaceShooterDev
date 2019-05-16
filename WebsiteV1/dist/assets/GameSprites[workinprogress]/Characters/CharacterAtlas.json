@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "CharacterAtlas.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 599,
+				"h": 50
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Maya.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 640,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 23,
+						"y": 16,
+						"w": 597,
+						"h": 48
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 597,
+						"h": 48
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:3792763ff020cdc0121cf2fa29f87668:aada5e101be28a5f6553e2e99122231a:637599819da1b86d58b336a2a9c72991$"
+	}
+}

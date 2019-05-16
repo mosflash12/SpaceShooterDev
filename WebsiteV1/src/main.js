@@ -9,7 +9,7 @@ let game = new Phaser.Game({
     scene:[
         LoadScene, MenuScene, PlayScene
     ],
-    pyhsics: {
+    physics: {
         default: 'arcade',
         arcade:{
             gravity:{y:300},

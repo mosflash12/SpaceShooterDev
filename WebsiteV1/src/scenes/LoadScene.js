@@ -22,8 +22,12 @@ export class LoadScene extends Phaser.Scene{
             frameHeight:32,
             frameWidth:32,
         });
+        this.load.spritesheet("MC","./assets/GameSprites[workinprogress]/Characters/MC.png", {frameHeight:64, frameWidth:64});
+        this.load.atlas("MC_atlas", "./assets/GameSprites[workinprogress]/Characters/CharacterAtlas.png", "./assets/GameSprites[workinprogress]/Characters/CharacterAtlas.json");
 
         this.load.audio("title_music","./assets/238072__shuinvy__childhood.mp3");
+
+        
 
         //create loading bar
 

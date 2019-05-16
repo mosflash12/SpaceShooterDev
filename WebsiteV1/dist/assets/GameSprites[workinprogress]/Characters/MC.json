@@ -1,0 +1,230 @@
+{
+	"textures": [
+		{
+			"image": "MC.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 592,
+				"h": 64
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Maya00.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 0,
+						"w": 59,
+						"h": 64
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 59,
+						"h": 64
+					}
+				},
+				{
+					"filename": "Maya01.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 0,
+						"w": 59,
+						"h": 64
+					},
+					"frame": {
+						"x": 59,
+						"y": 0,
+						"w": 59,
+						"h": 64
+					}
+				},
+				{
+					"filename": "Maya02.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 0,
+						"w": 59,
+						"h": 64
+					},
+					"frame": {
+						"x": 118,
+						"y": 0,
+						"w": 59,
+						"h": 64
+					}
+				},
+				{
+					"filename": "Maya03.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 0,
+						"w": 58,
+						"h": 64
+					},
+					"frame": {
+						"x": 177,
+						"y": 0,
+						"w": 58,
+						"h": 64
+					}
+				},
+				{
+					"filename": "Maya04.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 0,
+						"w": 58,
+						"h": 64
+					},
+					"frame": {
+						"x": 235,
+						"y": 0,
+						"w": 58,
+						"h": 64
+					}
+				},
+				{
+					"filename": "Maya05.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 61,
+						"h": 64
+					},
+					"frame": {
+						"x": 293,
+						"y": 0,
+						"w": 61,
+						"h": 64
+					}
+				},
+				{
+					"filename": "Maya06.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 0,
+						"w": 60,
+						"h": 64
+					},
+					"frame": {
+						"x": 354,
+						"y": 0,
+						"w": 60,
+						"h": 64
+					}
+				},
+				{
+					"filename": "Maya07.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 0,
+						"w": 58,
+						"h": 64
+					},
+					"frame": {
+						"x": 414,
+						"y": 0,
+						"w": 58,
+						"h": 64
+					}
+				},
+				{
+					"filename": "Maya08.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 0,
+						"w": 58,
+						"h": 64
+					},
+					"frame": {
+						"x": 472,
+						"y": 0,
+						"w": 58,
+						"h": 64
+					}
+				},
+				{
+					"filename": "Maya09.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 62,
+						"h": 64
+					},
+					"frame": {
+						"x": 530,
+						"y": 0,
+						"w": 62,
+						"h": 64
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:2bdf68e784e1241addf2d88522cd1a73:ccf68696fe5f11c8d8b4b6b2345319e5:192c7e7a2067d6c02c1400d17ffeb262$"
+	}
+}
