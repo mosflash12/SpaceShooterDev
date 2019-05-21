@@ -4,8 +4,8 @@
 			"image": "CharacterAtlas.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 599,
-				"h": 50
+				"w": 1139,
+				"h": 66
 			},
 			"scale": 1,
 			"frames": [
@@ -18,16 +18,37 @@
 						"h": 64
 					},
 					"spriteSourceSize": {
-						"x": 23,
-						"y": 16,
-						"w": 597,
-						"h": 48
+						"x": 5,
+						"y": 0,
+						"w": 633,
+						"h": 64
 					},
 					"frame": {
 						"x": 1,
 						"y": 1,
-						"w": 597,
-						"h": 48
+						"w": 633,
+						"h": 64
+					}
+				},
+				{
+					"filename": "jumpcycle.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 512,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 0,
+						"w": 502,
+						"h": 64
+					},
+					"frame": {
+						"x": 636,
+						"y": 1,
+						"w": 502,
+						"h": 64
 					}
 				}
 			]
@@ -36,6 +57,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:3792763ff020cdc0121cf2fa29f87668:aada5e101be28a5f6553e2e99122231a:637599819da1b86d58b336a2a9c72991$"
+		"smartupdate": "$TexturePacker:SmartUpdate:87e759ee4533f206be684da133c5219e:a3b0654fafb51a0afdc361891555ccac:637599819da1b86d58b336a2a9c72991$"
 	}
 }

@@ -167,7 +167,7 @@
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMargin</key>
-            <uint>1</uint>
+            <uint>19</uint>
             <key>trimMode</key>
             <enum type="SpriteSettings::TrimMode">Trim</enum>
             <key>tracerTolerance</key>
@@ -182,6 +182,7 @@
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">../Characters/Maya.png</key>
+            <key type="filename">../Characters/MayaFlip.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -198,6 +199,7 @@
         <key>fileList</key>
         <array>
             <filename>../Characters/Maya.png</filename>
+            <filename>../Characters/MayaFlip.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -27,7 +27,7 @@ export class LoadScene extends Phaser.Scene{
 
         this.load.audio("title_music","./assets/238072__shuinvy__childhood.mp3");
 
-        
+       
 
         //create loading bar
 
