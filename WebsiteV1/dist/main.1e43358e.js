@@ -128,7 +128,9 @@ var CST = {
   SCENES: {
     LOAD: "LOAD",
     MENU: "MENU",
-    PLAY: "PLAY"
+    PLAY: "PLAY",
+    GAMEOVER: "GAMEOVER",
+    WIN: "WIN"
   }
 };
 exports.CST = CST;
@@ -196,7 +198,8 @@ function (_Phaser$Scene) {
         frameWidth: 64
       });
       this.load.atlas("MC_atlas", "./assets/GameSprites[workinprogress]/Characters/CharacterAtlas.png", "./assets/GameSprites[workinprogress]/Characters/CharacterAtlas.json");
-      this.load.audio("title_music", "./assets/238072__shuinvy__childhood.mp3"); //create loading bar
+      this.load.audio("title_music", "./assets/238072__shuinvy__childhood.mp3");
+      this.load.audio("music_box", "./assets/freesourceaudio/238070__shuinvy__childhoodmusicbox.mp3"); //create loading bar
 
       var loadingBar = this.add.graphics({
         fillStyle: {
@@ -301,12 +304,13 @@ function (_Phaser$Scene) {
           frames: [0, 1, 2, 3, 4, 5, 6, 7]
         })
       }); //in order to stop audio when off the current page, disable pauseonblur
-      // this.sound.pauseOnBlur = false;
       //to create audio
 
-      this.sound.play("title_music", {
-        loop: true
-      });
+      var soundSample = this.sound.add("title_music");
+      soundSample.play(); // this.sound.play("title_music",{
+      //     loop: true,
+      // })
+
       /*
           PointerEvents:
               pointerover - hovering
@@ -327,6 +331,8 @@ function (_Phaser$Scene) {
         hoverSprite.setVisible(false);
       });
       playButton.on("pointerup", function () {
+        soundSample.stop();
+
         _this.scene.start(_CST.CST.SCENES.PLAY);
       });
       optionButton.on("pointerover", function () {
@@ -397,7 +403,8 @@ function (_Phaser$Scene) {
       this.load.image("RPNoTop", "./assets/GameSprites[workinprogress]/Maps/RPNoTop.png");
       this.load.image("GrassA", "./assets/GameSprites[workinprogress]/Maps/GrassA.png");
       this.load.image("inner hole", "./assets/inner hole.png");
-      this.load.image("ladder", "./assets/ladder.png"); // this.load.image("orb2"," ./assets/orb2.png");
+      this.load.image("ladder", "./assets/ladder.png");
+      this.load.image("spikes", "./assets/spikes.png"); // this.load.image("orb2"," ./assets/orb2.png");
 
       this.load.tilemapTiledJSON("mappy", "./assets/GameSprites[workinprogress]/Maps/level_1[backup].json");
       this.textures.addSpriteSheetFromAtlas("Maya1", {
@@ -445,7 +452,7 @@ function (_Phaser$Scene) {
 
       this.orbs = this.physics.add.group({
         key: "orb",
-        repeat: 11,
+        repeat: 25,
         setXY: {
           x: 12,
           y: -700,
@@ -464,12 +471,14 @@ function (_Phaser$Scene) {
       var terrain2 = mappy.addTilesetImage("RPWithTop");
       var terrain3 = mappy.addTilesetImage("GrassA");
       var background = mappy.addTilesetImage("inner hole");
-      var ladder = mappy.addTilesetImage("ladder"); // let orbtiles = mappy.addTilesetImage("orb2");
+      var ladder = mappy.addTilesetImage("ladder");
+      var spikes = mappy.addTilesetImage("spikes"); // let orbtiles = mappy.addTilesetImage("orb2");
       //layers
       //-2600
 
       var ground = mappy.createStaticLayer("Ground Layer", [terrain, terrain2, terrain3, ladder], 0, -2600).setDepth(-1);
-      var wall = mappy.createStaticLayer("backgroundlayer", [background], 0, -2600).setDepth(-2); // let orblayer = mappy.createDynamiclayer('orb2', orbtiles,0,0);
+      var damage = mappy.createStaticLayer("DamageLayer", [spikes], 0, -2600).setDepth(-2);
+      var wall = mappy.createStaticLayer("backgroundlayer", [background], 0, -2600).setDepth(-3); // let orblayer = mappy.createDynamiclayer('orb2', orbtiles,0,0);
       // orblayer.setTileindexCallBack('2', orbtiles,0,0);
       //set bounds so the camera wouldnt go outside the game world
 
@@ -481,11 +490,12 @@ function (_Phaser$Scene) {
 
       this.physics.add.collider(this.maya, ground);
       this.physics.add.collider(this.orbs, ground);
-      this.phyiscs.add.collider(this.maya, wall);
-      this.phyiscs.add.overlap(this.maya, wall, climbup, null, this);
+      this.physics.add.collider(this.maya, damage, spikeDamage, null, this); // this.phyiscs.add.collider(this.maya, wall);
+      // this.phyiscs.add.overlap(this.maya,wall,climbup,null,this);
+
       this.physics.add.overlap(this.maya, this.orbs, collectOrb, null, this);
       this.score = 0;
-      this.scoreText = this.add.text(200, 110, 'score: 0', {
+      this.scoreText = this.add.text(200, 110, 'Orbs: 0', {
         fontSize: '32px',
         fill: '#ffffff'
       });
@@ -497,9 +507,21 @@ function (_Phaser$Scene) {
         orbs.disableBody(true, true);
         this.maya.setTint(0x9FC5E8);
         this.score++;
-        this.scoreText.setText('score: ' + this.score);
+        this.scoreText.setText('Orbs: ' + this.score);
         this.maya.setTint(0xFFFFFF);
+
+        if (this.score == 13) {
+          this.scene.start(_CST.CST.SCENES.WIN);
+        }
+
+        ;
         return false;
+      }
+
+      function spikeDamage(player, spike) {
+        player == this.maya;
+        spike == damage;
+        this.scene.start(_CST.CST.SCENES.GAMEOVER);
       } // function climbup(player,ladder){
       //     player == this.maya;
       //     ladder == ladder
@@ -510,15 +532,13 @@ function (_Phaser$Scene) {
       ground.setCollisionByProperty({
         collides: true
       });
+      damage.setCollisionByProperty({
+        SpikeDamage: true
+      });
     }
   }, {
     key: "update",
     value: function update() {
-      /*  this.physics.world.collide(this.maya,(maya: Phaser.Physics.Arcade.Sprite)=>{
-           maya.destroy();
-           hooded.destroy();
-         } */
-      // this.physics.accelerateToObject()
       if (this.keyboard.A.isDown === true) {
         this.maya.setVelocityX(-100);
         this.maya.play("left", true); //used to flip the sprite
@@ -545,6 +565,192 @@ function (_Phaser$Scene) {
 }(Phaser.Scene);
 
 exports.PlayScene = PlayScene;
+},{"../CST":"src/CST.js"}],"src/scenes/GAMEOVER.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GAMEOVER = void 0;
+
+var _CST = require("../CST");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var GAMEOVER =
+/*#__PURE__*/
+function (_Phaser$Scene) {
+  _inherits(GAMEOVER, _Phaser$Scene);
+
+  function GAMEOVER() {
+    _classCallCheck(this, GAMEOVER);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(GAMEOVER).call(this, {
+      key: _CST.CST.SCENES.GAMEOVER
+    }));
+  }
+
+  _createClass(GAMEOVER, [{
+    key: "create",
+    value: function create() {
+      var _this = this;
+
+      this.add.image(0, 0, "titlebg").setOrigin(0).setDepth(0);
+      var musicbox = this.sound.add("music_box", {
+        loop: true
+      });
+      musicbox.play();
+      var hoverSprite = this.add.sprite(100, 100, "orb");
+      hoverSprite.setScale(2);
+      hoverSprite.setVisible(false);
+      this.anims.create({
+        key: "walk",
+        frameRate: 4,
+        repeat: -1,
+        // to repeat forever
+        frames: this.anims.generateFrameNumbers("orb", {
+          frames: [0, 1, 2, 3, 4, 5, 6, 7]
+        })
+      });
+      var gameOverText = this.add.text(350, 110, 'Your Dead!', {
+        fontSize: '64px',
+        fill: '#ffffff'
+      });
+      var PlayAgain = this.add.text(430, 410, 'Play Again?', {
+        fontSize: '32px',
+        fill: '#ffffff'
+      });
+      PlayAgain.setInteractive();
+      PlayAgain.on("pointerover", function () {
+        hoverSprite.setVisible(true);
+        hoverSprite.play("walk");
+        hoverSprite.x = PlayAgain.x - PlayAgain.width + 180;
+        hoverSprite.y = PlayAgain.y + 10;
+      });
+      PlayAgain.on("pointerout", function () {
+        hoverSprite.setVisible(false);
+      });
+      PlayAgain.on("pointerup", function () {
+        musicbox.stop();
+
+        _this.scene.start(_CST.CST.SCENES.LOAD);
+      });
+    }
+  }]);
+
+  return GAMEOVER;
+}(Phaser.Scene);
+
+exports.GAMEOVER = GAMEOVER;
+},{"../CST":"src/CST.js"}],"src/scenes/WIN.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.WIN = void 0;
+
+var _CST = require("../CST");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var WIN =
+/*#__PURE__*/
+function (_Phaser$Scene) {
+  _inherits(WIN, _Phaser$Scene);
+
+  function WIN() {
+    _classCallCheck(this, WIN);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(WIN).call(this, {
+      key: _CST.CST.SCENES.WIN
+    }));
+  }
+
+  _createClass(WIN, [{
+    key: "create",
+    value: function create() {
+      var _this = this;
+
+      this.add.image(0, 0, "titlebg").setOrigin(0).setDepth(0);
+      var musicbox = this.sound.add("music_box", {
+        loop: true
+      });
+      musicbox.play();
+      var hoverSprite = this.add.sprite(100, 100, "orb");
+      hoverSprite.setScale(2);
+      hoverSprite.setVisible(false);
+      this.anims.create({
+        key: "walk",
+        frameRate: 4,
+        repeat: -1,
+        // to repeat forever
+        frames: this.anims.generateFrameNumbers("orb", {
+          frames: [0, 1, 2, 3, 4, 5, 6, 7]
+        })
+      });
+      var winning = this.add.text(250, 110, 'You are Winner!', {
+        fontSize: '64px',
+        fill: '#ffffff'
+      });
+      var PlayAgain = this.add.text(430, 410, 'Play Again?', {
+        fontSize: '32px',
+        fill: '#ffffff'
+      });
+      PlayAgain.setInteractive();
+      PlayAgain.on("pointerover", function () {
+        hoverSprite.setVisible(true);
+        hoverSprite.play("walk");
+        hoverSprite.x = PlayAgain.x - PlayAgain.width + 180;
+        hoverSprite.y = PlayAgain.y + 10;
+      });
+      PlayAgain.on("pointerout", function () {
+        hoverSprite.setVisible(false);
+      });
+      PlayAgain.on("pointerup", function () {
+        musicbox.stop();
+
+        _this.scene.start(_CST.CST.SCENES.LOAD);
+      });
+    }
+  }]);
+
+  return WIN;
+}(Phaser.Scene);
+
+exports.WIN = WIN;
 },{"../CST":"src/CST.js"}],"src/main.js":[function(require,module,exports) {
 "use strict";
 
@@ -554,11 +760,15 @@ var _MenuScene = require("./scenes/MenuScene");
 
 var _PlayScene = require("./scenes/PlayScene");
 
+var _GAMEOVER = require("./scenes/GAMEOVER");
+
+var _WIN = require("./scenes/WIN");
+
 /**@type {import("phaser")} */
 var game = new Phaser.Game({
   width: 1067,
   height: 600,
-  scene: [_LoadScene.LoadScene, _MenuScene.MenuScene, _PlayScene.PlayScene],
+  scene: [_LoadScene.LoadScene, _MenuScene.MenuScene, _PlayScene.PlayScene, _GAMEOVER.GAMEOVER, _WIN.WIN],
   physics: {
     default: 'arcade',
     arcade: {
@@ -572,7 +782,7 @@ var game = new Phaser.Game({
     pixelArt: true
   }
 });
-},{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js","./scenes/PlayScene":"src/scenes/PlayScene.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./scenes/LoadScene":"src/scenes/LoadScene.js","./scenes/MenuScene":"src/scenes/MenuScene.js","./scenes/PlayScene":"src/scenes/PlayScene.js","./scenes/GAMEOVER":"src/scenes/GAMEOVER.js","./scenes/WIN":"src/scenes/WIN.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -600,7 +810,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53467" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64261" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -17,6 +17,7 @@ export class PlayScene extends Phaser.Scene {
         this.load.image("GrassA","./assets/GameSprites[workinprogress]/Maps/GrassA.png");
         this.load.image("inner hole","./assets/inner hole.png");
         this.load.image("ladder","./assets/ladder.png");
+        this.load.image("spikes","./assets/spikes.png");
         // this.load.image("orb2"," ./assets/orb2.png");
 
         this.load.tilemapTiledJSON("mappy","./assets/GameSprites[workinprogress]/Maps/level_1[backup].json");
@@ -70,7 +71,7 @@ export class PlayScene extends Phaser.Scene {
    
 
     create(){
-       
+        
 
         this.maya = this.physics.add.sprite(100,430, "Maya1");
         this.maya.setBounce(0.2);
@@ -79,7 +80,7 @@ export class PlayScene extends Phaser.Scene {
         //collecting orbs
         this.orbs = this.physics.add.group({
             key: "orb",
-            repeat: 11,
+            repeat: 25,
             setXY:{x: 12, y:-700, stepX:70, stepY:70}
         });
 
@@ -102,6 +103,7 @@ export class PlayScene extends Phaser.Scene {
         let terrain3 = mappy.addTilesetImage( "GrassA");
         let background = mappy.addTilesetImage("inner hole");
         let ladder = mappy.addTilesetImage("ladder");
+        let spikes = mappy.addTilesetImage("spikes");
         // let orbtiles = mappy.addTilesetImage("orb2");
 
 
@@ -109,7 +111,10 @@ export class PlayScene extends Phaser.Scene {
         //-2600
 
         let ground = mappy.createStaticLayer("Ground Layer", [terrain,terrain2,terrain3,ladder],0,-2600).setDepth(-1);
-        let wall = mappy.createStaticLayer("backgroundlayer", [background],0,-2600).setDepth(-2);
+        let damage = mappy.createStaticLayer("DamageLayer",[spikes],0,-2600).setDepth(-2);
+        let wall = mappy.createStaticLayer("backgroundlayer", [background],0,-2600).setDepth(-3);
+        
+        
         
 
         // let orblayer = mappy.createDynamiclayer('orb2', orbtiles,0,0);
@@ -129,11 +134,13 @@ export class PlayScene extends Phaser.Scene {
        // map collisions
         this.physics.add.collider(this.maya, ground);
         this.physics.add.collider(this.orbs, ground);
-        this.phyiscs.add.collider(this.maya, wall);
-        this.phyiscs.add.overlap(this.maya,wall,climbup,null,this);
+        this.physics.add.collider(this.maya, damage, spikeDamage,null,this);
+        // this.phyiscs.add.collider(this.maya, wall);
+        // this.phyiscs.add.overlap(this.maya,wall,climbup,null,this);
+        
         this.physics.add.overlap(this.maya,this.orbs,collectOrb,null,this);
         this.score = 0;
-        this.scoreText = this.add.text(200,110,'score: 0', {
+        this.scoreText = this.add.text(200,110,'Orbs: 0', {
             fontSize: '32px',
             fill:'#ffffff'
         });
@@ -147,10 +154,23 @@ export class PlayScene extends Phaser.Scene {
             orbs.disableBody(true,true);
             this.maya.setTint(0x9FC5E8);
             this.score ++;
-            this.scoreText.setText('score: ' + this.score);
-            this.maya.setTint(0xFFFFFF);
+            this.scoreText.setText('Orbs: ' + this.score);
+            this.maya.setTint(0xFFFFFF); 
+
+            if (this.score == 13){
+                this.scene.start(CST.SCENES.WIN);
+            };
             return false
            
+        }
+
+        function spikeDamage(player,spike){
+            player == this.maya;
+            spike == damage;
+
+            this.scene.start(CST.SCENES.GAMEOVER);
+
+            
         }
         // function climbup(player,ladder){
         //     player == this.maya;
@@ -161,6 +181,7 @@ export class PlayScene extends Phaser.Scene {
             //by tile property
         
         ground.setCollisionByProperty({collides:true});
+        damage.setCollisionByProperty({SpikeDamage: true});
 
        
     }
@@ -169,13 +190,7 @@ export class PlayScene extends Phaser.Scene {
 
     update(){
 
-       /*  this.physics.world.collide(this.maya,(maya: Phaser.Physics.Arcade.Sprite)=>{
-            maya.destroy();
-            hooded.destroy();
-
-        } */
-
-        // this.physics.accelerateToObject()
+    
 
          
 

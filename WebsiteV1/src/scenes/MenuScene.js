@@ -39,12 +39,15 @@ export class MenuScene extends Phaser.Scene{
         })
         //in order to stop audio when off the current page, disable pauseonblur
 
-        // this.sound.pauseOnBlur = false;
+      
         //to create audio
 
-        this.sound.play("title_music",{
-            loop: true,
-        })
+        let soundSample = this.sound.add("title_music");
+        soundSample.play();
+        
+        // this.sound.play("title_music",{
+        //     loop: true,
+        // })
 
         
         
@@ -74,7 +77,8 @@ export class MenuScene extends Phaser.Scene{
         })
 
         playButton.on("pointerup", ()=>{
-
+          
+            soundSample.stop();
             this.scene.start(CST.SCENES.PLAY);
             
         })

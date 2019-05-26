@@ -18,7 +18,7 @@ export class LoadScene extends Phaser.Scene{
         this.load.image("play_button", "./assets/night_playbutton.png");
         this.load.image("logo", "./assets/originallogo3.png");
 
-        this .load.spritesheet("orb","./assets/orb2.png",{
+        this.load.spritesheet("orb","./assets/orb2.png",{
             frameHeight:32,
             frameWidth:32,
         });
@@ -26,6 +26,7 @@ export class LoadScene extends Phaser.Scene{
         this.load.atlas("MC_atlas", "./assets/GameSprites[workinprogress]/Characters/CharacterAtlas.png", "./assets/GameSprites[workinprogress]/Characters/CharacterAtlas.json");
 
         this.load.audio("title_music","./assets/238072__shuinvy__childhood.mp3");
+        this.load.audio("music_box", "./assets/freesourceaudio/238070__shuinvy__childhoodmusicbox.mp3");
 
        
 
